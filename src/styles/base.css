@@ -1,0 +1,46 @@
+
+/*flex*/
+.flex-box {
+	display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+.flex-item {
+	-webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+}
+.flex-direction_column {
+	-webkit-box-orient: vertical;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+.flex-align_center {
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;	
+} 
+.flex-justify_center {
+	-webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+.flex-wrap {
+	flex-wrap: wrap; 
+	-webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+}
+
+/*基础部分*/
+#app {
+	min-height: 100%;
+}
+.container {
+	height: 100%;
+}
+

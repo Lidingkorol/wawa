@@ -1,0 +1,351 @@
+html {
+    -webkit-text-size-adjust: none;
+    font-size: 13.333333vw;
+    font-family: 'Microsoft JhengHei Light','Microsoft JhengHei','Microsoft YaHei Light','Microsoft YaHei',sans-serif;
+}
+
+body{
+    font-size: 0.24rem;
+}
+
+#YSF-BTN-HOLDER {
+    /*  客服隐藏  */
+    display: none;
+}
+
+
+/*  滚动条  */
+
+::-webkit-scrollbar {
+    width:2px;
+    height:2px;
+}
+::-webkit-scrollbar-track:vertical {
+    background:#FF0000;
+}
+::-webkit-scrollbar-track-piece {
+    background:#F5F5F5
+}
+::-webkit-scrollbar-thumb:vertical {
+    background:#CCCCCC;
+    border-radius:1px;
+}
+::-webkit-scrollbar-thumb:vertical:hover {
+    background:#666666;
+}
+
+/*  slider 控制条样式  */
+
+.bullet {
+    width: 0.14rem;
+    height: 0.14rem;
+    display: inline-block;
+    border-radius: 100%;
+    background: #ffffff;
+    opacity: 0.4;
+    margin: 0 0.06rem;
+    transition: .5s ease;
+}
+
+.bullet-active {
+    background: #ffffff;
+    opacity: 1;
+}
+
+/*.product-sw .bullet {*/
+    /*width: 0.14rem;*/
+    /*height: 0.14rem;*/
+    /*display: inline-block;*/
+    /*border-radius: 100%;*/
+    /*!*background: #1d2628;*!*/
+    /*opacity: 1;*/
+    /*!*border: 0.02rem solid #fff;*!*/
+    /*margin: 0 0.06rem;*/
+    /*transition: border-color 1s,color 1s,background 1s;*/
+/*}*/
+
+
+/*.product-sw .bullet-active {*/
+    /*!*background: #ffffff;*!*/
+    /*!*border: 0.02rem solid #1d2628;*!*/
+    /*opacity: 1;*/
+/*}*/
+
+.swiper-slide > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+.toast {
+    padding: 0.14rem 0.2rem !important;
+    border-radius: 0.14rem !important;
+}
+.mint-spinner-fading-circle {
+	width: 1rem;
+	height: 1rem;
+}
+
+/*  cell  */
+
+.cell {
+    height: 0.80rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+}
+.cell.border-bottom::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: #dedede;
+    color: #dedede;
+    height: 1px;
+    -webkit-transform: scaleY(.5);
+    transform: scaleY(.5);
+}
+.cell.border-top::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    background: #e2e2e2;
+    color: #e2e2e2;
+    height: 1px;
+    -webkit-transform: scaleY(.5);
+    transform: scaleY(.5);
+}
+
+.cell-allow-right {
+    border: 0.02rem solid rgb(135,145,148);
+    border-bottom-width: 0;
+    border-left-width: 0;
+    top: 50%;
+    right: 0;
+    position: absolute;
+    width: 0.14rem;
+    height: 0.14rem;
+    -webkit-transform: translateY(-50%) rotate(45deg);
+    transform: translateY(-50%) rotate(45deg);
+    transform-origin: bottom;
+}
+
+
+.line {
+    background: #f2f2f2;
+    height: 0.2rem;
+}
+
+
+/*  首页 transition 动画  */
+.ani-in-transition {
+    transition: all .3s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+    transform: scale(1);
+    opacity: 1;
+}
+
+.ani-in-enter {
+    transform: scale(0);
+    opacity: 0;
+}
+.ani-in-leave {
+    opacity: 0;
+}
+
+
+/*  透明度通用 transition 动画  */
+
+.ani-opacity-transition {
+    transition: opacity .8s;
+    opacity: 1;
+}
+.ani-opacity-enter {
+    opacity: 0;
+}
+.ani-opacity-leave {
+    opacity: 0;
+}
+
+/*  透明度通用 transition 动画  */
+
+.ani-opacity2-transition {
+    transition: opacity .2s;
+    opacity: 1;
+}
+.ani-opacity2-enter {
+    opacity: 0;
+}
+.ani-opacity2-leave {
+    opacity: 0;
+}
+
+
+
+.ani-move-transition {
+    transition: transform .3s;
+    transform: translateX(0)
+}
+.ani-move-enter {
+    transform: translateX(100%)
+}
+.ani-move-leave {
+    transform: translateX(100%)
+}
+
+
+.ani-bottom-up-transition {
+    transition: transform .3s;
+    transform: translateY(0)
+}
+.ani-bottom-up-enter {
+    transform: translateY(100%)
+}
+.ani-bottom-up-leave {
+    transform: translateY(100%)
+}
+
+
+/*  转场动画  */
+
+.mint-spinner-triple-bounce {
+    text-align: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -0.25rem;
+    margin-left: -0.75rem;
+    z-index: 9999;
+}
+.mint-spinner-triple-bounce > div {
+    width: 0.5rem !important;
+    height: 0.5rem !important;
+}
+
+/*  推荐  */
+
+.cantuan-maylike {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    flex-direction: row;
+    padding: 0.1rem 0 0.2rem 0;
+}
+
+.maylike-item {
+    margin-bottom: 0.1rem;
+    width: 3.7rem;
+    /*height: 5.4rem;*/
+    background: #fff;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+.maylike-item .picture {
+    width: 100%;
+    height: 3.9rem;
+    object-fit: cover;
+}
+.maylike-item .info {
+    width: 100%;
+    height: 1.5rem;
+}
+.maylike-item .info > .title {
+    margin: 0.16rem 0.2rem;
+    line-height: 0.36rem;
+    overflow : hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    font-weight: normal;
+}
+.maylike-item .info > .price {
+    padding: 0 0.2rem 0.25rem 0.2rem;
+    line-height: 1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+}
+
+
+/*  lazy-load  */
+img {
+    vertical-align: middle;
+    opacity: 1;
+    transition: .3s opacity ease-in;
+}
+img[lazy=loading] {
+    width: 0.4rem;
+    height: 3rem;
+    margin: auto;
+    opacity: 0;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+/*  piker  */
+
+.address-choose {
+    position: relative;
+    width: 100%;
+}
+.address-choose::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background: #dedede;
+    height: 1px;
+    width: 100%;
+    -webkit-transform: scaleY(.5);
+    transform: scaleY(.5);
+}
+.address-choose .region-picker {
+    font-size: 0.28rem;
+    font-family: inherit;
+    height: 1rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.address-choose .region-picker label {
+    display: inline-block;
+    height: 0.6rem;
+    margin: 0.1rem 0;
+    width: 33.33%;
+}
+.address-choose .region-picker label select {
+    text-align: left;
+    padding-left: 0.1rem;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+}
+
+
+
+.nodata {
+    padding-top: 0.9rem;
+    padding-bottom: 0.5rem;
+    width: 100%;
+    text-align: center;
+}
+.nodata > img {
+    width: 3.5rem;
+    height: 3.5rem;
+    object-fit: contain;
+}
+.nodata > p {
+    text-align: center;
+    padding-top: 0.5rem;
+}
