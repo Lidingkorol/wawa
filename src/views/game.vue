@@ -222,6 +222,7 @@
 				}*/
 				var start=this.$els.clamp.style.top;
 				var stop=this.$els.loop.offsetTop;
+				x=
 				requestAnimationFrame(this.animate);
 			}
 		}
