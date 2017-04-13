@@ -196,34 +196,24 @@
 	            },1500)
 			},
 			check:function(){
-				console.log(1)
-				/*Object.defineProperty(this.$els.clamp,'offsetTop',{
-					set:function(val){
-						offsetTop=value;
-						console.log(this.$els.clamp.offsetTop)
-					},
-					get:function(){
-						console.log(this.$els.clamp.offsetTop)
-						return offsetTop;
-					}
-				})*/
-				console.log(this.$els.clamp.offsetTop)
+				
 			},
 			animate:function(){
-				/*var start=this.$els.clamp.style.top;
-				var stop=this.$els.loop.offsetTop/20;
-				let [t,b,c,d]=[.1,start,stop,2];
-				let x=Linear(t,b,c,d);
-				start = x;
-				console.log(x)
-				this.$els.clamp.style.top=x+'px';
-				if(x>this.$els.loop.style.offsetTop) {
-					return;
-				}*/
 				var start=this.$els.clamp.style.top;
 				var stop=this.$els.loop.offsetTop;
-				x=
-				requestAnimationFrame(this.animate);
+				var time=0.1;
+				var step=function(time,start,stop){
+					let [t,b,c,d]=[time,start,stop,2];
+					let x=Linear(t,b,c,d);
+					start = x;
+					time+=0.1;
+					console.log(x)
+					this.$els.clamp.style.top=x;
+					if(time>2) {
+						return;
+					}
+					requestAnimationFrame(step);
+				}
 			}
 		}
 	}
