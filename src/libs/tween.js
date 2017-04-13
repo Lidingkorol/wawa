@@ -9,7 +9,8 @@
     * c 动画的变化量
     * d 动画持续时间
     * */
-    function Linear(t, b, c, d) { return c*t/d + b; };
+    function Linear(t, b, c, d) { 
+    	return c*t/d + b; };
     let Quad= {
         easeIn(t, b, c, d) {
             return c * (t /= d) * t + b;

@@ -60,20 +60,51 @@
 		text-align: center;
 	}
 	.clamp {
-		position: absolute;
+		position: relative;
 		top: 1.1rem;
 		left: 3rem;
 		z-index: 999;
 	}
 	.clamp img {
 		width: 1.5rem;
-		transition: all linear 1s;
 		height: 1.8rem;
+		opacity: 1;
+		-webkit-backface-visibility: hidden;
+		position: absolute;
 	}
-	.aniHeight {
-		height: 5rem;
-		margin-top: 5rem;
+/*	.clamp img.aniHeight {
+		animation: aniHeight 1.5s linear;
+		-moz-animation: aniHeight 1.5s linear;	
+		-webkit-animation: aniHeight 1.5s linear;	
+		-o-animation: aniHeight 1.5s linear;	
 	}
+	@keyframes aniHeight
+	{
+		0% {top:0rem;}
+		50%{top:5.5rem;}
+		100%{top:0rem;}
+	}
+	
+	@-moz-keyframes aniHeight 
+	{
+		0% {top:0rem;}
+		50%{top:5.5rem;}
+		100%{top:0rem;}
+	}
+	
+	@-webkit-keyframes aniHeight 
+	{
+		0% {top:0rem;}
+		50%{top:5.5rem;}
+		100%{top:0rem;}
+	}
+	
+	@-o-keyframes aniHeight 
+	{
+		0% {top:0rem;}
+		50%{top:5.5rem;}
+		100%{top:0rem;}
+	}*/
 	.btn {
 		position: absolute;
 		bottom: 1rem;
@@ -81,7 +112,7 @@
 		right: 0;
 		height: 1.2rem;
 	}
-	.btn a {
+	.btn button {
 		background: url(../images/btn_03.png);
 		background-size: 100%;
 		text-align: center;
@@ -89,6 +120,8 @@
 		height: 1.1rem;
 		display: inline-block;
 		line-height: 1.1rem;
+		outline: none;
+		border:none;
 	}
 </style>
 <template>
@@ -101,9 +134,9 @@
 			<span>ID:{{}}</span>
 		</div>
 		<div class="clamp" >
-			<img src="../images/jz_03.png" :class="{aniHeight:isPlaying}">
+			<img src="../images/jz_03.png" :class="{aniHeight:isPlaying}" v-el:clamp>
 		</div>
-		<marquee class="loop" loop="infinite" direction="left" behavior="scroll">
+		<marquee class="loop" loop="infinite" direction="left" behavior="scroll" v-el:loop>
             <ul class="flex-box">
 				<li class="item" v-for="i in list">
 					<span>{{i.price}}</span>
@@ -111,13 +144,13 @@
 			</ul>
 		</marquee>
 		<div class="btn">
-			<a @click="play">开始</a>
+			<button @click.prevent="play" :disabled="isPlaying">开始</button>
 		</div>
 		<nav-bottom :link="1"></nav-bottom>
 	</div>
 </template>
 <script>
-
+	import { Linear } from '../libs/tween'
 	import navBottom from '../components/bottom'
 	import Swiper from '../libs/swiper.min'
 	
@@ -136,12 +169,12 @@
 			navBottom
 		},
 		watch:{
-            
 		},
 		data () {
 			return {
 				list:[],
-				isPlaying:false
+				isPlaying:false,
+				clamp:{},
 			}
 		},
 		created() {
@@ -157,6 +190,39 @@
 		methods: {
 			play:function(){
 				this.isPlaying=true;
+				this.animate();
+				setTimeout(()=>{
+	            	this.isPlaying=false;
+	            },1500)
+			},
+			check:function(){
+				console.log(1)
+				/*Object.defineProperty(this.$els.clamp,'offsetTop',{
+					set:function(val){
+						offsetTop=value;
+						console.log(this.$els.clamp.offsetTop)
+					},
+					get:function(){
+						console.log(this.$els.clamp.offsetTop)
+						return offsetTop;
+					}
+				})*/
+				console.log(this.$els.clamp.offsetTop)
+			},
+			animate:function(){
+				/*var start=this.$els.clamp.style.top;
+				var stop=this.$els.loop.offsetTop/20;
+				let [t,b,c,d]=[.1,start,stop,2];
+				let x=Linear(t,b,c,d);
+				start = x;
+				console.log(x)
+				this.$els.clamp.style.top=x+'px';
+				if(x>this.$els.loop.style.offsetTop) {
+					return;
+				}*/
+				var start=this.$els.clamp.style.top;
+				var stop=this.$els.loop.offsetTop;
+				requestAnimationFrame(this.animate);
 			}
 		}
 	}
