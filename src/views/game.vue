@@ -40,10 +40,12 @@
 		right: 0;
 		margin: 0 .35rem;
 		box-sizing: border-box;
+		overflow: hidden;
 	}
 	.loop ul {
 		width: 20rem;
 		flex-wrap: nowrap;
+		position: relative;
 	}
 	.loop .item {
 		background:url(../images/wawa_03.png) no-repeat;
@@ -60,17 +62,16 @@
 		text-align: center;
 	}
 	.clamp {
-		position: relative;
+		position: absolute;
 		top: 1.1rem;
 		left: 3rem;
 		z-index: 999;
+		opacity: 1;
+		-webkit-backface-visibility: hidden;
 	}
 	.clamp img {
 		width: 1.5rem;
 		height: 1.8rem;
-		opacity: 1;
-		-webkit-backface-visibility: hidden;
-		position: absolute;
 	}
 /*	.clamp img.aniHeight {
 		animation: aniHeight 1.5s linear;
@@ -133,16 +134,23 @@
 			<span>ID:{{}}</span>
 			<span>ID:{{}}</span>
 		</div>
-		<div class="clamp" >
-			<img src="../images/jz_03.png" :class="{aniHeight:isPlaying}" v-el:clamp>
+		<div class="clamp" v-el:clamp>
+			<img src="../images/jz_03.png" :class="{aniHeight:isPlaying}">
 		</div>
-		<marquee class="loop" loop="infinite" direction="left" behavior="scroll" v-el:loop>
-            <ul class="flex-box">
+		<!--<marquee class="loop" loop="infinite" direction="left" behavior="scroll" v-el:loop>
+            <ul class="flex-box" v-el:ul>
 				<li class="item" v-for="i in list">
 					<span>{{i.price}}</span>
 				</li>
 			</ul>
-		</marquee>
+		</marquee>-->
+		<div class="loop" v-el:loop>
+			<ul class="flex-box" v-el:ul>
+				<li class="item" v-for="i in list">
+					<span>{{i.price}}</span>
+				</li>
+			</ul>
+		</div>
 		<div class="btn">
 			<button @click.prevent="play" :disabled="isPlaying">开始</button>
 		</div>
@@ -183,6 +191,10 @@
 		ready () {
 			this.list=fData;
 			this.$dispatch('isLoading',false);
+			setInterval(()=>{
+            	this.animateLoop();
+            },10000)
+			this.animateLoop();
 		},
 		beforeDestroy () {
 
@@ -190,7 +202,7 @@
 		methods: {
 			play:function(){
 				this.isPlaying=true;
-				this.animate();
+				this.animateDown();
 				setTimeout(()=>{
 	            	this.isPlaying=false;
 	            },1500)
@@ -198,22 +210,74 @@
 			check:function(){
 				
 			},
-			animate:function(){
-				var start=this.$els.clamp.style.top;
-				var stop=this.$els.loop.offsetTop;
-				var time=0.1;
-				var step=function(time,start,stop){
-					let [t,b,c,d]=[time,start,stop,2];
+			animateDown:function(){
+				let start=this.$els.clamp.offsetTop;
+				let stop=this.$els.loop.offsetTop - start - this.$els.clamp.offsetHeight/2;
+				let time=0.1;
+				let eTime=2;
+				let that=this;
+				var arrObj=this.$els.ul.children;
+				var parObj=this.$els.loop;
+				function step(){
+					let [t,b,c,d]=[time,start,stop,eTime];
 					let x=Linear(t,b,c,d);
-					start = x;
-					time+=0.1;
-					console.log(x)
-					this.$els.clamp.style.top=x;
-					if(time>2) {
+					time+=0.05;
+					if(time>eTime) {
+						that.animateUp();
 						return;
 					}
+					if(that.$els.clamp.offsetTop + that.$els.clamp.offsetHeight>that.$els.loop.offsetTop) {
+						for(var i=0;i<arrObj.length;i++){
+							/*console.count()
+							console.log(arrObj[i].offsetLeft + that.$els.ul.offsetLeft)*/
+							if(that.$els.clamp.offsetLeft>arrObj[i].offsetLeft + that.$els.ul.offsetLeft&&
+							that.$els.clamp.offsetLeft + that.$els.clamp.offsetWidth<arrObj[i].offsetLeft + that.$els.ul.offsetLeft + arrObj[i].offsetWidth) {
+								console.count()
+								console.log(i)
+							}
+						}
+					}
+					that.$els.clamp.style.top=x+'px';
 					requestAnimationFrame(step);
 				}
+				step();
+			},
+			animateUp:function(){
+				let start=this.$els.clamp.offsetTop;
+				let stop=-(start - this.$els.clamp.offsetHeight/2);
+				let time=0.1;
+				let eTime=2;
+				let that=this;
+				function step(){
+					let [t,b,c,d]=[time,start,stop,eTime];
+					let x=Linear(t,b,c,d);
+					time+=0.05;
+					if(time>eTime) {
+						return ;
+					}
+					that.$els.clamp.style.top=x+'px';
+					requestAnimationFrame(step);
+				}
+				step();
+			},
+			animateLoop:function(){
+				let start=this.$els.loop.offsetWidth;
+				let stop=-this.$els.ul.offsetWidth - start;
+				let time=0.01;
+				let eTime=5;
+				let that=this;
+				function step(){
+					let [t,b,c,d]=[time,start,stop,eTime];
+					let x=Linear(t,b,c,d);
+					time+=0.01;
+					if(time>eTime) {
+						that.$els.loop.left=that.$els.loop.offsetWidth;
+						return;
+					}
+					that.$els.ul.style.left=x+'px';
+					requestAnimationFrame(step);
+				}
+				step();
 			}
 		}
 	}
