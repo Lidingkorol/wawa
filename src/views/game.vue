@@ -11,14 +11,29 @@
 		top: .9rem;
 		left: .5rem;
 	}
-	.message span {
+	.message .item {
 		border-radius: .3rem;
 		background: rgb(255,222,187);
 		width: 2.25rem;
 		height: .6rem;
 		line-height: .6rem;
-		display: block;
 		margin-top: .15rem;
+		padding:0 .1rem;
+	}
+	.message .item .add {
+		background:url(../images/add_03.png) no-repeat;
+		background-size: 100%;
+		width: .5rem;
+		height: .5rem;
+		display: block;
+	}
+	.title {
+		position:absolute;
+		top: .3rem;
+		height: .7rem;
+		left: 0;
+		right: 0;
+		color: #fff;
 	}
 	.service {
 		position:fixed;
@@ -48,6 +63,10 @@
 		position: relative;
 	}
 	.loop .item {
+		width: 2.8rem;
+		height: 2.2rem;
+	}
+	.loop .box {
 		background:url(../images/wawa_03.png) no-repeat;
 		background-size: cover;
 		width: 1.8rem;
@@ -55,7 +74,7 @@
 		position: relative;
 		margin: 0 .5rem;
 	}
-	.loop .item span {
+	.loop .box span {
 		position: absolute;
 		bottom: .6rem;
 		width: 100%;
@@ -124,15 +143,20 @@
 		outline: none;
 		border:none;
 	}
+
 </style>
 <template>
 	<div class="container">
 		<a class="service">
 			联系客服
 		</a>
+		<div class="title flex-box flex-direction_column flex-justify_center flex-align_center">
+			<span class="fontSize_42"><b>{{}}</b></span>
+			<span class="fontSize_20">夹娃娃</span>
+		</div>
 		<div class="message">
-			<span>ID:{{}}</span>
-			<span>ID:{{}}</span>
+			<div class="item">ID:{{}}</div>
+			<div class="item flex-box flex-align_center"><span class="flex-item">ID:{{}}</span><i class="add" @click="recharge"></i></div>
 		</div>
 		<div class="clamp" v-el:clamp>
 			<img src="../images/jz_03.png" :class="{aniHeight:isPlaying}">
@@ -147,11 +171,16 @@
 		<div class="loop" v-el:loop>
 			<ul class="flex-box" v-el:ul>
 				<li class="item" v-for="i in list">
-					<span>{{i.price}}</span>
+					<div class="box">
+						<span>{{i.price}}</span>
+					</div>
 				</li>
 			</ul>
 		</div>
 		<div class="btn">
+			<a>5</a>
+			<a>10</a>
+			<a>30</a>
 			<button @click.prevent="play" :disabled="isPlaying">开始</button>
 		</div>
 		<nav-bottom :link="1"></nav-bottom>
@@ -182,7 +211,7 @@
 			return {
 				list:[],
 				isPlaying:false,
-				clamp:{},
+				clamp:{}
 			}
 		},
 		created() {
@@ -234,6 +263,9 @@
 							that.$els.clamp.offsetLeft + that.$els.clamp.offsetWidth<arrObj[i].offsetLeft + that.$els.ul.offsetLeft + arrObj[i].offsetWidth) {
 								console.count()
 								console.log(i)
+								/*console.log(arrObj[i].firstElementChild)
+								arrObj[i].firstElementChild.style.position='absolute';
+								that.aniUp(arrObj[i].firstElementChild)*/
 							}
 						}
 					}
@@ -260,6 +292,26 @@
 				}
 				step();
 			},
+			/*aniUp:function(target){
+				let start=target.offsetTop;
+				let stop= - this.$els.clamp.offsetTop + this.$els.clamp.offsetHeight;
+				let time=0.1;
+				let eTime=2;
+				let that=this;
+				console.log(start)
+				console.log(stop)
+				function step(){
+					let [t,b,c,d]=[time,start,stop,eTime];
+					let x=Linear(t,b,c,d);
+					time+=0.05;
+					if(time>eTime) {
+						return ;
+					}
+					target.style.top=x+'px';
+					requestAnimationFrame(step);
+				}
+				step();
+			},*/
 			animateLoop:function(){
 				let start=this.$els.loop.offsetWidth;
 				let stop=-this.$els.ul.offsetWidth - start;

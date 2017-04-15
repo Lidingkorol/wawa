@@ -5,12 +5,28 @@
 		padding-top: 3rem;
 		box-sizing: border-box;
 	}
+	.service {
+		position:fixed;
+		left: 0;
+		top: 3rem;
+		line-height: .6rem;
+		height: .6rem;
+		border-bottom-right-radius: .3rem;
+		border-top-right-radius: .3rem;
+		background:rgba(0,0,0,0.7);
+		color: #fff;
+		width: 1.5rem;
+		text-align: center;
+		font-weight: bold;
+	}
 	.main_top {
-		line-height: 1rem;
-		height: 1rem;
+		line-height: .8rem;
+		height: .8rem;
 		text-align: center;
 		margin: 0 auto;
 		display: block;
+		color: #fff;
+		font-weight: bold;
 	}
 	.myList {
 		padding:0 .6rem;
@@ -35,10 +51,44 @@
 	.myList span {
 		text-align: center;
 	}
+		.bounce-transition {
+  		display: inline-block; /* 否则 scale 动画不起作用 */
+	}
+	.bounce-enter {
+	  	animation: bounce-in .5s;
+	}
+	.bounce-leave {
+  		animation: bounce-out .5s;
+	}
+	@keyframes bounce-in {
+	  0% {
+	    transform: scale(0);
+	  }
+	  50% {
+	    transform: scale(1.5);
+	  }
+	  100% {
+	    transform: scale(1);
+	  }
+	}
+	@keyframes bounce-out {
+	  0% {
+	    transform: scale(1);
+	  }
+	  50% {
+	    transform: scale(1.5);
+	  }
+	  100% {
+	    transform: scale(0);
+	  }
+	}
 </style>
 <template>
 	<div class="container">
-		<span class="main_top">下级越多，佣金越多</span>
+		<a class="service" @click="goRule">
+			佣金规则
+		</a>
+		<span class="main_top fontSize_34 ">下级越多，佣金越多</span>
 		<div class="myList flex-box flex-direction_column">
 			<span class="item_hd">
 				佣金排行榜
@@ -58,19 +108,24 @@
 				</ul>
 			</div>
 		</div>
+		<dialog transition="bounce" v-show="isShow" @touchmove.prevent></dialog>
 		<nav-bottom :link="4"></nav-bottom>
 	</div>
 </template>
 <script>
 
-	import navBottom from '../components/bottom'
+	import navBottom from '../components/bottom';
+	import dialog from '../components/dialog'
 
 	export default {
 		components: {
-			navBottom
+			navBottom,
+			dialog
 		},
 		data () {
-			return {}
+			return {
+				isShow:false
+			}
 		},
 		created() {
 			this.$dispatch('isLoading',true)
@@ -81,6 +136,15 @@
 		beforeDestroy () {
 
 		},
-		methods: {}
+		methods: {
+			goRule:function(){
+				this.isShow=true;
+			}
+		},
+		events:{
+			'dialog':function(value){
+				this.isShow=value;
+			}
+		}
 	}
 </script>
