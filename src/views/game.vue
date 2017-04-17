@@ -130,24 +130,69 @@
 		bottom: 1rem;
 		left: 0;
 		right: 0;
-		height: 1.2rem;
+		height: 1.3rem;
+		padding: 0 .5rem;
+	}
+	.btn a {
+		text-align: center;
+		background: url(../images/btn_05.png)no-repeat;
+		background-size: 100%;
+		height: .6rem;
+    	margin: 0 .1rem;
+    	width: .6rem;
+    	line-height: .5rem;
+    	color: #fff;
+    	transition: all ease-in-out .1s;
+	}
+	.btn a.click {
+		margin-top: .2rem;
+		background: url(../images/btn_06.png)no-repeat;
+		background-size: 100%;
 	}
 	.btn button {
 		background: url(../images/btn_03.png);
 		background-size: 100%;
 		text-align: center;
-		width: 3.8rem;
-		height: 1.1rem;
+		width: 3.7rem;
+		height: 1.2rem;
 		display: inline-block;
-		line-height: 1.1rem;
 		outline: none;
 		border:none;
+		color: #fff;
+		font-weight: bold;
 	}
-
+	.bounce-enter {
+	  	animation: bounce-in .5s;
+	}
+	.bounce-leave {
+  		animation: bounce-out .5s;
+	}
+	@keyframes bounce-in {
+	  0% {
+	    transform: scale(0);
+	  }
+	  50% {
+	    transform: scale(1.5);
+	  }
+	  100% {
+	    transform: scale(1);
+	  }
+	}
+	@keyframes bounce-out {
+	  0% {
+	    transform: scale(1);
+	  }
+	  50% {
+	    transform: scale(1.5);
+	  }
+	  100% {
+	    transform: scale(0);
+	  }
+	}
 </style>
 <template>
 	<div class="container">
-		<a class="service">
+		<a class="service" @click="goService">
 			联系客服
 		</a>
 		<div class="title flex-box flex-direction_column flex-justify_center flex-align_center">
@@ -177,12 +222,13 @@
 				</li>
 			</ul>
 		</div>
-		<div class="btn">
-			<a>5</a>
-			<a>10</a>
-			<a>30</a>
-			<button @click.prevent="play" :disabled="isPlaying">开始</button>
+		<div class="btn flex-box flex-align_center">
+			<a class="flex-item" :class="{ click:isChoose==1}" @click="goChoose(1)">￥5</a>
+			<a class="flex-item" :class="{ click:isChoose==2}" @click="goChoose(2)">￥10</a>
+			<a class="flex-item" :class="{ click:isChoose==3}" @click="goChoose(3)">￥30</a>
+			<button @click.prevent="play" :disabled="isPlaying" class="fontSize_42">开始</button>
 		</div>
+		<Service transition="bounce" v-show="isShow" @touchmove.prevent></Service>
 		<nav-bottom :link="1"></nav-bottom>
 	</div>
 </template>
@@ -190,6 +236,7 @@
 	import { Linear } from '../libs/tween'
 	import navBottom from '../components/bottom'
 	import Swiper from '../libs/swiper.min'
+	import Service from '../components/service'
 	
 	var fData=[
 		{price:11},
@@ -203,7 +250,8 @@
 	
 	export default {
 		components: {
-			navBottom
+			navBottom,
+			Service
 		},
 		watch:{
 		},
@@ -211,7 +259,10 @@
 			return {
 				list:[],
 				isPlaying:false,
-				clamp:{}
+				clamp:{},
+				inter:null,
+				isShow:false,
+				isChoose:1
 			}
 		},
 		created() {
@@ -220,13 +271,13 @@
 		ready () {
 			this.list=fData;
 			this.$dispatch('isLoading',false);
-			setInterval(()=>{
+			this.inter=window.setInterval(()=>{
             	this.animateLoop();
             },10000)
 			this.animateLoop();
 		},
 		beforeDestroy () {
-
+			window.clearInterval(this.inter)
 		},
 		methods: {
 			play:function(){
@@ -235,6 +286,12 @@
 				setTimeout(()=>{
 	            	this.isPlaying=false;
 	            },1500)
+			},
+			goService:function(){
+				this.isShow=true;
+			},
+			goChoose:function(value){
+				this.isChoose=value;
 			},
 			check:function(){
 				
@@ -330,6 +387,11 @@
 					requestAnimationFrame(step);
 				}
 				step();
+			}
+		},
+		events:{
+			'dialog':function(value){
+				this.isShow=value;
 			}
 		}
 	}

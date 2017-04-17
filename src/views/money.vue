@@ -33,8 +33,17 @@
 		margin-top: .2rem;
 	}
 	.wallet>.price {
-		line-height: 1rem;
-		height: 1rem;
+		line-height: 1.5rem;
+		height: 1.5rem;
+		font-size: .58rem;
+	}
+	.wallet>p {
+		border-top:1px solid rgb(153,24,18);
+		width: 100%;
+		text-align: center;
+		line-height: .6rem;
+		height: .6rem;
+		color: rgb(175,44,60);
 	}
 	.wallet>a {
 		display:block;
@@ -44,6 +53,8 @@
 		line-height: .6rem;
 		border-radius: .1rem;
 		text-align: center;
+		margin-top: .2rem;
+		color: rgb(175,44,60);
 	}
 	.myList {
 		margin-top: .2rem;
@@ -52,6 +63,7 @@
 		background-color: rgb(242,144,152);
 		line-height: .65rem;
 		height: .65rem;
+		color: rgb(175,44,60);
 	}
 	.myList .item_bd .title {
 		background-color:rgb(153,24,18);
@@ -85,9 +97,9 @@
 				</div>
 			</div>
 			<div class="wallet flex-box flex-direction_column flex-align_center">
-				<span class="title">账号余额</span>
+				<span class="title fontSize_28">账号余额</span>
 				<span class="price">￥{{}}</span>
-				<p>满一元可提现，每天可提现50次</p>
+				<p class="fontSize_28">满一元可提现，每天可提现50次</p>
 				<a>立即提现</a>
 			</div>
 			<div class="myList flex-box flex-direction_column">

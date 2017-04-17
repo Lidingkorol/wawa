@@ -35,6 +35,7 @@
 		background-color: rgb(242,144,152);
 		line-height: .65rem;
 		height: .65rem;
+		color: rgb(175,44,60);
 	}
 	.myList .item_bd .title {
 		background-color:rgb(153,24,18);
