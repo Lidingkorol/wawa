@@ -3,7 +3,7 @@
  */
 import Vue from 'vue';
 export default {
-     post(url,{data={},body={ "Access-Control-Allow-Origin":'*',"Access-Control-Allow-Headers":'Origin, X-Requested-With, Content-Type, Accept'}}={}){
+     post(url,{data={},body={}}={}){
          return new Promise((rs,rj)=>{
              Vue.http.post(url,data,body)
                  .then((res)=>{

@@ -5,9 +5,9 @@ import Env from './env';
 
 let config = {
     env: Env,
-    appName: '众联夺宝',
-    shareName: '[拼宝]',
-    apiDomain: 'http://www.haitao.cn',
+    appName: '疯狂夹娃娃',
+    shareName: '夹娃娃',
+    apiDomain: 'http://api.wawa.com',
     imgDomain: '',
     isCache: true,
     serverCode: {

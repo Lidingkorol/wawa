@@ -79,4 +79,9 @@ export default {
         }
         return null;
     },
+    /*getByClass(className,parent) {
+    	var oParent=parent?document.getElementById(parent):document;
+    	eles=[];
+    	elemnts=oParent.getElementsByClassName()
+    }*/
 }

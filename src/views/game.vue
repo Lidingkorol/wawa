@@ -58,13 +58,32 @@
 		overflow: hidden;
 	}
 	.loop ul {
-		width: 20rem;
+		width: 30rem;
 		flex-wrap: nowrap;
 		position: relative;
 	}
 	.loop .item {
 		width: 2.8rem;
 		height: 2.2rem;
+		padding: 0 .5rem;
+		box-sizing: border-box;
+	}
+	.clamp .box {
+		background:url(../images/wawa_03.png) no-repeat;
+		background-size: cover;
+		width: 1.8rem;
+		height: 2.2rem;
+		position: relative;
+		
+		top: -.5rem;
+    	left: -.15rem;
+	}
+	.clamp .box span {
+		position: absolute;
+		bottom: .5rem;
+		width: 100%;
+		text-align: center;
+		color: rgb(254,222,112);
 	}
 	.loop .box {
 		background:url(../images/wawa_03.png) no-repeat;
@@ -72,13 +91,13 @@
 		width: 1.8rem;
 		height: 2.2rem;
 		position: relative;
-		margin: 0 .5rem;
 	}
 	.loop .box span {
 		position: absolute;
-		bottom: .6rem;
+		bottom: .5rem;
 		width: 100%;
 		text-align: center;
+		color: rgb(254,222,112);
 	}
 	.clamp {
 		position: absolute;
@@ -86,6 +105,7 @@
 		left: 3rem;
 		z-index: 999;
 		opacity: 1;
+		height: 1.8rem;
 		-webkit-backface-visibility: hidden;
 	}
 	.clamp img {
@@ -196,7 +216,7 @@
 			联系客服
 		</a>
 		<div class="title flex-box flex-direction_column flex-justify_center flex-align_center">
-			<span class="fontSize_42"><b>{{}}</b></span>
+			<span class="fontSize_42"><b>{{title[isChoose-1]}}</b></span>
 			<span class="fontSize_20">夹娃娃</span>
 		</div>
 		<div class="message">
@@ -217,7 +237,7 @@
 			<ul class="flex-box" v-el:ul>
 				<li class="item" v-for="i in list">
 					<div class="box">
-						<span>{{i.price}}</span>
+						<span class="fontSize_34">{{i}}</span>
 					</div>
 				</li>
 			</ul>
@@ -237,23 +257,24 @@
 	import navBottom from '../components/bottom'
 	import Swiper from '../libs/swiper.min'
 	import Service from '../components/service'
-	
-	var fData=[
-		{price:11},
-		{price:12},
-		{price:13},
-		{price:14},
-		{price:15},
-		{price:16},
-		{price:17}
-	]
-	
+	import Config from '../config/config'
+    import Request from '../config/request'
+    import { Toast,Indicator,MessageBox } from 'mint-ui';
+    
+    
 	export default {
 		components: {
 			navBottom,
 			Service
 		},
 		watch:{
+			'isChoose':function(){
+                Indicator.open({
+                    spinnerType: 'snake'
+                });
+                this.animateLoop();
+				this.getList();
+			}
 		},
 		data () {
 			return {
@@ -262,14 +283,16 @@
 				clamp:{},
 				inter:null,
 				isShow:false,
-				isChoose:1
+				isChoose:1,
+				title:['5元','10元','30元'],
+				money:[5,10,30]
 			}
 		},
 		created() {
 			this.$dispatch('isLoading',true)
 		},
 		ready () {
-			this.list=fData;
+			this.getList()
 			this.$dispatch('isLoading',false);
 			this.inter=window.setInterval(()=>{
             	this.animateLoop();
@@ -280,12 +303,20 @@
 			window.clearInterval(this.inter)
 		},
 		methods: {
+			async getList(){
+				let res = await Request.post(Config.apiDomain+ '/Index/showGoods',{data:{money:this.money[this.isChoose-1]}});
+        		if(res.status == 200 && !!res.data){
+	        		this.list=res.data;
+	        		Indicator.close()
+	        	}else {
+	        		Toast('网络错误，请重试！！')
+	        		Indicator.close()
+	        	}
+	        	Indicator.close()
+			},
 			play:function(){
 				this.isPlaying=true;
 				this.animateDown();
-				setTimeout(()=>{
-	            	this.isPlaying=false;
-	            },1500)
 			},
 			goService:function(){
 				this.isShow=true;
@@ -299,15 +330,15 @@
 			animateDown:function(){
 				let start=this.$els.clamp.offsetTop;
 				let stop=this.$els.loop.offsetTop - start - this.$els.clamp.offsetHeight/2;
-				let time=0.1;
+				let time=0;
 				let eTime=2;
 				let that=this;
-				var arrObj=this.$els.ul.children;
+				var arrObj=this.$els.ul.getElementsByClassName('box');
 				var parObj=this.$els.loop;
 				function step(){
 					let [t,b,c,d]=[time,start,stop,eTime];
 					let x=Linear(t,b,c,d);
-					time+=0.05;
+					
 					if(time>eTime) {
 						that.animateUp();
 						return;
@@ -323,28 +354,31 @@
 								/*console.log(arrObj[i].firstElementChild)
 								arrObj[i].firstElementChild.style.position='absolute';
 								that.aniUp(arrObj[i].firstElementChild)*/
+								that.$els.clamp.appendChild(arrObj[i]);
 							}
 						}
 					}
 					that.$els.clamp.style.top=x+'px';
+					time+=0.05;
 					requestAnimationFrame(step);
 				}
 				step();
 			},
 			animateUp:function(){
 				let start=this.$els.clamp.offsetTop;
-				let stop=-(start - this.$els.clamp.offsetHeight/2);
-				let time=0.1;
+				let stop=-start+50;
+				let time=0;
 				let eTime=2;
 				let that=this;
 				function step(){
 					let [t,b,c,d]=[time,start,stop,eTime];
 					let x=Linear(t,b,c,d);
-					time+=0.05;
 					if(time>eTime) {
+						that.isPlaying=false;
 						return ;
 					}
 					that.$els.clamp.style.top=x+'px';
+					time+=0.05;
 					requestAnimationFrame(step);
 				}
 				step();
