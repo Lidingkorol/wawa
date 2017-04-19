@@ -71,8 +71,8 @@
         created () {
 			/*console.log(Weixin.isWeixin)
             if(Weixin.isWeixin) Weixin.init();
-			console.log(Weixin.isWeixin)
-            User.init(this.$route.query);
+			console.log(Weixin.isWeixin)*/
+            /*User.init(this.$route.query);
 			console.log(User.isLogin)
             if(!User.isLogin) window.location.href = Config.apiDomain+'/User/login';*/
 

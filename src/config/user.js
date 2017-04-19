@@ -142,50 +142,6 @@ class User{
     }
 
 
-
-
-    // async getDefaultAddress(){
-    //
-    //     let res = await Request.post(Config.apiDomain + '/Ptdetail/address',{data:{token:this.token}});
-    //
-    //     return res;
-    // }
-
-
-    async addAddress(address){
-        let res = await Request.post(Config.apiDomain + '/index/addAddress',{data:address})
-
-        return res;
-
-    }
-
-    async updateAddress(address){
-        console.log(address)
-        let res = await Request.post(Config.apiDomain + '/grouporder/setDefault',{data:address})
-        return res;
-    }
-    async PTupdateAddress(address){
-        console.log(address)
-        let res = await Request.post(Config.apiDomain + '/Ptdetail/addAddress',{data:address})
-        return res;
-    }
-
-    async getAddress(){
-
-        let res = await Request.post(Config.apiDomain + '/Member/getUserAddressList?token='+this.token)
-
-        return res;
-
-    }
-
-    async delAddress(id){
-
-        let res = await Request.post(Config.apiDomain + '/Member/delUserAddress?token='+this.token,{data:{addressId:id}});
-
-        return res;
-
-    }
-
 }
 
 

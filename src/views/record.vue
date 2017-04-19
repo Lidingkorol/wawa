@@ -126,7 +126,8 @@
 <script>
 
 	import navBottom from '../components/bottom'
-	
+	/*import Request from '../config/request'
+	import Config from '../config'*/
 	
 	export default {
 		components : {
@@ -144,7 +145,11 @@
 		beforeDestroy () {
 
 		},
-		methods: {}
+		methods: {
+/*			async getGoods() {
+				let res=Request.post(Config.apiDomain + '/Index/getGood',{data:{token:111,money}})
+			}*/
+		}
 		
 		
 	}

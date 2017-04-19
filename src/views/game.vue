@@ -76,7 +76,7 @@
 		position: relative;
 		
 		top: -.5rem;
-    	left: -.15rem;
+    	left: -.26rem;
 	}
 	.clamp .box span {
 		position: absolute;
@@ -102,49 +102,53 @@
 	.clamp {
 		position: absolute;
 		top: 1.1rem;
-		left: 3rem;
+		left: 3.1rem;
 		z-index: 999;
 		opacity: 1;
-		height: 1.8rem;
+		height: 1.6rem;
 		-webkit-backface-visibility: hidden;
 	}
 	.clamp img {
-		width: 1.5rem;
-		height: 1.8rem;
+		width: 1.3rem;
+		height: 1.6rem;
 	}
-/*	.clamp img.aniHeight {
-		animation: aniHeight 1.5s linear;
-		-moz-animation: aniHeight 1.5s linear;	
-		-webkit-animation: aniHeight 1.5s linear;	
-		-o-animation: aniHeight 1.5s linear;	
+	.clamp .aniHeight {
+		animation: aniHeight 2s linear;
+		-moz-animation: aniHeight 2s linear;	
+		-webkit-animation: aniHeight 2s linear;	
+		-o-animation: aniHeight 2s linear;	
+		background:url(../images/wawa_03.png) no-repeat;
+		background-size: cover;
+		width: 1.8rem;
+		height: 2.2rem;
+		position: relative;
+		top:-.5rem;
+    	left: -.26rem;
+    	animation-fill-mode : forwards
 	}
 	@keyframes aniHeight
 	{
-		0% {top:0rem;}
-		50%{top:5.5rem;}
-		100%{top:0rem;}
+		0% {top:-.5rem;}
+		100%{top:2.5rem;}
 	}
 	
 	@-moz-keyframes aniHeight 
 	{
-		0% {top:0rem;}
-		50%{top:5.5rem;}
-		100%{top:0rem;}
+		0% {top:-.5rem;}
+		100%{top:2.5rem;}
 	}
 	
 	@-webkit-keyframes aniHeight 
 	{
-		0% {top:0rem;}
-		50%{top:5.5rem;}
-		100%{top:0rem;}
+		0% {top:-.5rem;}
+		100%{top:2.5rem;}
 	}
 	
 	@-o-keyframes aniHeight 
 	{
-		0% {top:0rem;}
-		50%{top:5.5rem;}
-		100%{top:0rem;}
-	}*/
+		0% {top:-.5rem;}
+		100%{top:2.5rem;}
+	}
 	.btn {
 		position: absolute;
 		bottom: 1rem;
@@ -224,7 +228,7 @@
 			<div class="item flex-box flex-align_center"><span class="flex-item">ID:{{}}</span><i class="add" @click="recharge"></i></div>
 		</div>
 		<div class="clamp" v-el:clamp>
-			<img src="../images/jz_03.png" :class="{aniHeight:isPlaying}">
+			<img src="../images/jz_03.png">
 		</div>
 		<!--<marquee class="loop" loop="infinite" direction="left" behavior="scroll" v-el:loop>
             <ul class="flex-box" v-el:ul>
@@ -272,6 +276,9 @@
                 Indicator.open({
                     spinnerType: 'snake'
                 });
+                if(this.$els.clamp.getElementsByClassName('aniHeight')[0]) {
+                	this.$els.clamp.getElementsByClassName('aniHeight')[0].remove();
+                }
                 this.animateLoop();
 				this.getList();
 			}
@@ -285,19 +292,23 @@
 				isShow:false,
 				isChoose:1,
 				title:['5元','10元','30元'],
-				money:[5,10,30]
+				money:[5,10,30],
+				key:null,
+				isReward:false
 			}
 		},
 		created() {
 			this.$dispatch('isLoading',true)
 		},
 		ready () {
-			this.getList()
+			this.getList();
+			this.getMyRecord();
 			this.$dispatch('isLoading',false);
 			this.inter=window.setInterval(()=>{
             	this.animateLoop();
             },10000)
 			this.animateLoop();
+			
 		},
 		beforeDestroy () {
 			window.clearInterval(this.inter)
@@ -314,9 +325,45 @@
 	        	}
 	        	Indicator.close()
 			},
-			play:function(){
+			async getKey(){
+				let res = await Request.post(Config.apiDomain+ '/Index/getKey',{data:{money:this.money[this.isChoose-1],token:111}});
+        		if(res.status == 200 && !!res.data){
+	        		this.key=res.data.key;
+	        		this.animateDown();
+	        	}else {
+	        		Toast(res.msg||'网络错误，请重试！');
+	        		this.isPlaying=false;
+	        	}
+			},
+			async getGood(getMoney,isGet){
+				let res = await Request.post(Config.apiDomain+ '/Index/getGood',{data:{money:this.money[this.isChoose-1],isGet:isGet,getMoney:getMoney,key:this.key,token:111}});
+        		if(res.status == 200 && !!res.data){
+        			console.log(res.data.flag==0)
+        			console.log(this.$els.clamp.getElementsByClassName('box')!=0)
+        			if(res.data.flag==0&&this.$els.clamp.getElementsByClassName('box').length!==0) {
+        				alert(1)
+        				console.log(this.$els.clamp.getElementsByClassName('box'))
+        				console.log(this.$els)
+						this.$els.clamp.getElementsByClassName('box')[0].setAttribute('class','aniHeight');
+						console.log(this.$els)
+        			}
+        			this.isReward=false;
+	        	}else {
+	        		Toast('网络错误，请重试！！')
+	        		this.isReward=false;
+	        	}
+			},
+			async getMyRecord(){
+				let res = await Request.post(Config.apiDomain+ '/Index/getMyRecord',{data:{token:111}});
+        		if(res.status == 200 && !!res.data){
+	        		console.log(res.data);
+	        	}else {
+	        		Toast('网络错误，请重试！！')
+	        	}
+			},
+			async play(){
 				this.isPlaying=true;
-				this.animateDown();
+				await this.getKey();
 			},
 			goService:function(){
 				this.isShow=true;
@@ -324,10 +371,7 @@
 			goChoose:function(value){
 				this.isChoose=value;
 			},
-			check:function(){
-				
-			},
-			animateDown:function(){
+			animateDown(){
 				let start=this.$els.clamp.offsetTop;
 				let stop=this.$els.loop.offsetTop - start - this.$els.clamp.offsetHeight/2;
 				let time=0;
@@ -338,8 +382,10 @@
 				function step(){
 					let [t,b,c,d]=[time,start,stop,eTime];
 					let x=Linear(t,b,c,d);
-					
 					if(time>eTime) {
+						if(!that.isReward) {
+							that.getGood(0,0);
+						}
 						that.animateUp();
 						return;
 					}
@@ -350,7 +396,8 @@
 							if(that.$els.clamp.offsetLeft>arrObj[i].offsetLeft + that.$els.ul.offsetLeft&&
 							that.$els.clamp.offsetLeft + that.$els.clamp.offsetWidth<arrObj[i].offsetLeft + that.$els.ul.offsetLeft + arrObj[i].offsetWidth) {
 								console.count()
-								console.log(i)
+								that.isReward=true;
+								that.getGood(arrObj[i].children[0].innerHTML,1);
 								/*console.log(arrObj[i].firstElementChild)
 								arrObj[i].firstElementChild.style.position='absolute';
 								that.aniUp(arrObj[i].firstElementChild)*/
@@ -406,13 +453,13 @@
 			animateLoop:function(){
 				let start=this.$els.loop.offsetWidth;
 				let stop=-this.$els.ul.offsetWidth - start;
-				let time=0.01;
+				let time=0.005;
 				let eTime=5;
 				let that=this;
 				function step(){
 					let [t,b,c,d]=[time,start,stop,eTime];
 					let x=Linear(t,b,c,d);
-					time+=0.01;
+					time+=0.005;
 					if(time>eTime) {
 						that.$els.loop.left=that.$els.loop.offsetWidth;
 						return;
