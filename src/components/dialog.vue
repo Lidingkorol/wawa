@@ -42,8 +42,8 @@
 				<p class="em fontSize_28">a、好友每玩一把5元，系统随机给<b>0.3~0.7</b>元佣金</p>
 				<p class="em fontSize_28">b、好友每玩一把10元，系统随机给<b>0.5~1</b>元佣金</p>
 				<p class="em fontSize_28">b、好友每玩一把20元，系统随机给<b>0.8~2</b>元佣金</p>
-				<p class="fontSize_28">2、佣金统一每5分钟计算一次</p>
-				<p class="fontSize_28">3、只需发朋友圈，群发，发群。多级分佣优先代理，赚点越多</p>
+				<p class="fontSize_28">2、佣金实时发放</p>
+				<p class="fontSize_28">3、只需发朋友圈，群发，发群。分享越多，赚点越多</p>
 			</div>
 		</div>
 	</div>

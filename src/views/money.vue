@@ -7,11 +7,11 @@
 	.container {
 		background: url(../images/asd_02.png) no-repeat;
 		background-size: 100%;
-		padding-top: 3rem;
+		padding-top: 2.8rem;
 		box-sizing: border-box;
 	}
 	.main {
-		/*background:rgb(216,39,29);*/
+		background:rgb(216,39,29);
 		padding:0 .6rem;
 	}
 	.allRecord span {
@@ -75,9 +75,22 @@
 	}
 	.myList .item_bd ul {
 		background-color: rgb(242,144,152);
+/*		overflow-x: auto;
+		height: 2rem;*/
+		color:rgb(216,39,29);
+	}
+	.myList .item_bd ul p {
+		text-align: center;
+		color: #fff;
+		padding:.3rem 0;
 	}
 	.myList span {
 		text-align: center;
+		
+	}
+	.blank {
+		height: 1.3rem;
+		background-color:rgb(216,39,29);
 	}
 </style>
 <template>
@@ -87,20 +100,18 @@
 			<div class="allRecord flex-box flex-direction_column">
 				<div class="item_hd flex-box flex-align_center">
 					<span class="flex-item">累计佣金</span>
-					<span class="flex-item">今日佣金</span>
-					<span class="flex-item">提现中佣金</span>
+					<span class="flex-item">累计提现</span>
 				</div>
 				<div class="item_bd flex-box flex-align_center">
-					<span class="flex-item">￥{{}}</span>
-					<span class="flex-item">￥{{}}</span>
-					<span class="flex-item">￥{{}}</span>
+					<span class="flex-item">￥{{user.total_send}}</span>
+					<span class="flex-item">￥{{user.total_get}}</span>
 				</div>
 			</div>
 			<div class="wallet flex-box flex-direction_column flex-align_center">
 				<span class="title fontSize_28">账号余额</span>
-				<span class="price">￥{{}}</span>
+				<span class="price">￥{{user.money}}</span>
 				<p class="fontSize_28">满一元可提现，每天可提现50次</p>
-				<a>立即提现</a>
+				<a @click="goWithdraw">立即提现</a>
 			</div>
 			<div class="myList flex-box flex-direction_column">
 				<span class="item_hd">
@@ -112,40 +123,72 @@
 						<span class="flex-item">收入</span>
 					</div>
 					<ul>
-						<li class="flex-box flex-align_center">
-							<span class="flex-item">{{}}</span>
-							<span class="flex-item">{{}}</span>
-						</li>
+						<template v-if="reList">
+							<li class="flex-box flex-align_center" v-for="i in reList">
+								<span class="flex-item">{{i.addtime}}</span>
+								<span class="flex-item">{{i.true_money}}</span>
+							</li>
+						</template>
+						<template v-else>
+							<p class="fontSize_30">暂无消费记录！</p>
+						</template>
 					</ul>
 				</div>
 			</div>
 		</div>
-		
+		<div class="blank"></div>
 		<nav-bottom :link="3"></nav-bottom>
 	</div>
 </template>
 <script>
 
 	import navBottom from '../components/bottom'
-	
+	import Request from '../config/request'
+	import Config from '../config/config'
+	import { Toast,Indicator,MessageBox } from 'mint-ui';
 	
 	export default {
 		components : {
 			navBottom
 		},
 		data () {
-			return {}
+			return {
+				user:{},
+				reList:[]
+			}
 		},
 		created() {
             this.$dispatch('isLoading',true)
         },
         ready () {
+        	this.getMyRecord();
             this.$dispatch('isLoading',false);
         },
 		beforeDestroy () {
 
 		},
-		methods: {}
+		methods: {
+			async getMyRecord(){
+				let res = await Request.post(Config.apiDomain+ '/Index/getMyRecord',{data:{token:111}});
+        		if(res.status == 200 && !!res.data){
+	        		this.user=res.data.user;
+	        		this.reList=res.data.recode;
+	        		console.log(res.reList)
+	        	}else {
+	        		Toast(res.msg)
+	        	}
+			},
+			async goWithdraw(){
+				let res = await Request.post(Config.apiDomain+ '/index/send_pay');
+        		if(res.status == 200){
+        			console.log(res.data)
+        			Toast(res.msg)
+        			window.location.reload();
+	        	}else {
+	        		Toast('提现金额未满一元！')
+	        	}
+			}
+		}
 		
 		
 	}

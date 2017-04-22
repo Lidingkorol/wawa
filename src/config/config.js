@@ -7,7 +7,7 @@ let config = {
     env: Env,
     appName: '疯狂夹娃娃',
     shareName: '夹娃娃',
-    apiDomain: 'http://api.wawa.com',
+    apiDomain: 'http://wawa.xianghong13.cn',
     imgDomain: '',
     isCache: true,
     serverCode: {

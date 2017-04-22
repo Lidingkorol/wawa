@@ -2,7 +2,7 @@
 	.container {
 		background: url(../images/asd_02.png) no-repeat;
 		background-size: 100%;
-		padding-top: 3rem;
+		padding-top: 2.8rem;
 		box-sizing: border-box;
 	}
 	.service {
@@ -47,14 +47,27 @@
 	}
 	.myList .item_bd ul {
 		background-color: rgb(242,144,152);
-		height: 6rem;
+/*		height: 6rem;
+		overflow-x: auto;*/
+		min-height: 5rem;
+		overflow-x: auto;
+	}
+	.myList .item_bd ul p {
+		text-align: center;
+		color: #fff;
+		padding-top: 2rem;
 	}
 	.myList span {
 		text-align: center;
 	}
-		.bounce-transition {
+	.blank {
+		height: 1.3rem;
+		background-color:rgb(216,39,29);
+	}
+	.bounce-transition {
   		display: inline-block; /* 否则 scale 动画不起作用 */
 	}
+	
 	.bounce-enter {
 	  	animation: bounce-in .5s;
 	}
@@ -101,15 +114,21 @@
 					<span class="flex-item">排名</span>
 				</div>
 				<ul>
-					<li class="flex-box flex-align_center">
-						<span class="flex-item">{{}}</span>
-						<span class="flex-item">{{}}</span>
-						<span class="flex-item">{{}}</span>
-					</li>
+					<template v-if="rank.length!==0">
+						<li class="flex-box flex-align_center" v-for="i in rank">
+							<span class="flex-item">{{i.pid}}</span>
+							<span class="flex-item">{{i.send_money}}</span>
+							<span class="flex-item">{{$index+1}}</span>
+						</li>
+					</template>
+					<template v-else>
+						<p class="fontSize_30">暂无排名信息！</p>
+					</template>
 				</ul>
 			</div>
 		</div>
 		<dialog transition="bounce" v-show="isShow" @touchmove.prevent></dialog>
+		<div class="blank"></div>
 		<nav-bottom :link="4"></nav-bottom>
 	</div>
 </template>
@@ -117,6 +136,8 @@
 
 	import navBottom from '../components/bottom';
 	import dialog from '../components/dialog'
+	import Request from '../config/request'
+	import Config from '../config/config'
 
 	export default {
 		components: {
@@ -125,13 +146,15 @@
 		},
 		data () {
 			return {
-				isShow:false
+				isShow:false,
+				rank:[]
 			}
 		},
 		created() {
 			this.$dispatch('isLoading',true)
 		},
 		ready () {
+			this.getMyRecord();
 			this.$dispatch('isLoading',false);
 		},
 		beforeDestroy () {
@@ -140,6 +163,19 @@
 		methods: {
 			goRule:function(){
 				this.isShow=true;
+			},
+			async getMyRecord(){
+				let res = await Request.post(Config.apiDomain+ '/Index/getMyRecord');
+        		if(res.status == 200 && !!res.data){
+        			this.rank=res.data.rank;
+        			for(let i=0;i<res.data.rank.length;i++) {
+        				if(res.data.rank[i].pid==0) {
+        					res.data.rank.splice(i,1);
+        				}
+        			}
+	        	}else {
+	        		Toast(res.msg)
+	        	}
 			}
 		},
 		events:{

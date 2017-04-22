@@ -8,6 +8,7 @@ import Routers from './router';
 import Env from './config/env';
 import MintUI from 'mint-ui';
 import VueResource from 'vue-resource';
+import setWechatTitle from './libs/setWechatTitle'
 
 Vue.use(VueRouter);
 Vue.use(MintUI);
@@ -19,7 +20,10 @@ Vue.http.options.xhr = {withCredentials: true};
 // post的时候会把JSON对象转成formdata
 Vue.http.options.emulateJSON=true;
 Vue.http.options.emulateHTTP = true;
-
+Vue.http.interceptors.push((request, next) => {
+    request.credentials = true
+    next()
+})
 
 // 路由配置
 let router = new VueRouter({
@@ -34,8 +38,9 @@ router.beforeEach(() => {
     window.scrollTo(0, 0);
 });
 
-router.afterEach(() => {
-
+router.afterEach((transition) => {
+	let title = transition.to.title || '疯狂抓娃娃'
+    setWechatTitle(title)
 });
 
 router.redirect({

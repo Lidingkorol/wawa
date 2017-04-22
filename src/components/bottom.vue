@@ -18,13 +18,8 @@
 		background:rgb(64,64,64);
 		color: #fff;
 	}
-	.blank {
-		height: 1rem;
-		background-color: #fff;
-	}
 </style>
 <template>
-	<!--<div class="blank"></div>-->
 	<div class="nav_bottom flex-box flex-align_center">
 		<a v-link="{path:'/game'}" :class="{on:link==1}" class="fontSize_30">夹娃娃</a>
 		<a v-link="{path:'/record'}" :class="{on:link==2}" class="fontSize_30">记录</a>

@@ -2,7 +2,7 @@
  * Created by lcfevr on 16/8/22.
  */
 const routers = {
-    '/index': {
+	'/index': {
 		component (resolve) {
 			require(['./views/index.vue'], resolve);
 		}
@@ -30,6 +30,11 @@ const routers = {
 	'/profit': {
 		component (resolve) {
 			require(['./views/profit.vue'], resolve);
+		}
+	},
+	'/recharge': {
+		component (resolve) {
+			require(['./views/recharge.vue'], resolve);
 		}
 	}
 };
