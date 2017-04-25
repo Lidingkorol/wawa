@@ -175,6 +175,9 @@
 			async getMyRecord(){
 				let res = await Request.post(Config.apiDomain+ '/Index/getMyRecord',{data:{token:111}});
         		if(res.status == 200 && !!res.data){
+        			if(!res.data.user) {
+	        			window.location.href=Config.apiDomain + '/Index/index';
+	        		}
         			this.user=res.data.user;
 	        		this.reList=res.data.recode;
 	        		this.money.today_send_money=res.data.today_send_money;

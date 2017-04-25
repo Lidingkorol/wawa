@@ -115,6 +115,9 @@
             async getMyRecord(){
 				let res = await Request.post(Config.apiDomain+ '/Index/getMyRecord');
         		if(res.status == 200 && !!res.data){
+        			if(!res.data.user) {
+	        			window.location.href=Config.apiDomain + '/Index/index';
+	        		}
 	        		if(res.data.user.is_recharge==0) {
 	        			this.items=[5,15,30,50,100,200];
 	        		}else {

@@ -9,7 +9,7 @@
 		overflow: hidden;
 	}
 	.loop ul {
-		width: 30rem;
+		width: 14rem;
 		flex-wrap: nowrap;
 		position: relative;
 		opacity: 1;
@@ -37,16 +37,29 @@
 		text-align: center;
 		color: rgb(254,222,112);
 	}
+	.loopBox {
+		width: 30rem;
+		position: relative;
+	}
 </style>
 <template>
 		<div class="loop" v-el:loop id="loops">
-			<ul class="flex-box" v-el:ul id="uls">
-				<li class="item" v-for="i in list">
-					<div class="box">
-						<span class="fontSize_34">{{i}}</span>
-					</div>
-				</li>
-			</ul>
+			<div v-el:box class="loopBox flex-box">
+				<ul class="flex-box" v-el:ul id="uls">
+					<li class="item" v-for="i in list">
+						<div class="box">
+							<span class="fontSize_34">{{i}}</span>
+						</div>
+					</li>
+				</ul>
+				<ul class="flex-box" v-el:ful id="uls2">
+					<li class="item" v-for="i in list">
+						<div class="box">
+							<span class="fontSize_34">{{i}}</span>
+						</div>
+					</li>
+				</ul>
+			</div>
 		</div>
 </template>
 <script>
@@ -90,21 +103,17 @@
 				let that=this;
 				var i=0;
 				var k=1;
-				console.log(this.$els.ul.children[0])
 				function step(){
 					/*console.count()*/
-					var first=that.$els.ul.children[0];
-					/*console.log(that.$els.ul.offsetLeft)*/
-					console.log(that.$els.ul.offsetLeft)
-					if(that.$els.ul.offsetLeft + first.offsetWidth*k<0) {
-						console.count();
-						k++;
-						that.$els.ul.removeChild(first);
-						that.$els.ul.appendChild(first);
-					}
 					i--;
-					that.$els.ul.style.left=i + 'px';
-					requestAnimationFrame(step);
+					console.log(that.$els.box.offsetLeft)
+					console.log(that.$els.ul.offsetWidth)
+					if(that.$els.ul.offsetWidth+that.$els.box.offsetLeft<0) {
+						that.$els.box.style.left=0;
+						i=0;
+					}
+					that.$els.box.style.left=i + 'px';
+					that.inter=requestAnimationFrame(step);
 				}
 				step();
 			},

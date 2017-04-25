@@ -8,7 +8,7 @@
 	.service {
 		position:fixed;
 		left: 0;
-		top: 3rem;
+		top: 2.8rem;
 		line-height: .6rem;
 		height: .6rem;
 		border-bottom-right-radius: .3rem;
@@ -167,6 +167,9 @@
 			async getMyRecord(){
 				let res = await Request.post(Config.apiDomain+ '/Index/getMyRecord');
         		if(res.status == 200 && !!res.data){
+        			if(!res.data.user) {
+	        			window.location.href=Config.apiDomain + '/Index/index';
+	        		}
         			this.rank=res.data.rank;
         			for(let i=0;i<res.data.rank.length;i++) {
         				if(res.data.rank[i].pid==0) {

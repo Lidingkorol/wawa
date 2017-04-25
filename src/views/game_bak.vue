@@ -81,15 +81,14 @@
 		width: 1.8rem;
 		height: 2.2rem;
 		position: relative;
-		top: -.7rem;
-    	left: -.16rem;
+		top: -.5rem;
+    	left: -.26rem;
     	opacity: 1;
 		-webkit-backface-visibility: hidden;
 	}
 	.clamp .box span {
 		position: absolute;
 		bottom: .5rem;
-		left: 0;
 		width: 100%;
 		text-align: center;
 		color: rgb(254,222,112);
@@ -116,36 +115,22 @@
 		text-align: center;
 		color: rgb(254,222,112);
 	}
-	.clampBox {
+	.clamp {
 		position: absolute;
 		top: 1.1rem;
-		left: 1.7rem;
+		left: 3.1rem;
 		z-index: 999;
 		opacity: 1;
-		height: 9rem;
-		width: 4rem;
-		overflow: hidden;
-		-webkit-backface-visibility: hidden;
-	}
-	.clamp {
-		position: relative;
-		z-index: 999;
-		opacity: 1;
-		height: 8rem;
-		top: -6.2rem;
-		text-align: center;
-		width: 1.5rem;
+		height: 1.6rem;
 		-webkit-backface-visibility: hidden;
 	}
 	.clamp img {
-		width: 1.5rem;
-		height: 8rem;
-		position: relative;
+		width: 1.3rem;
+		height: 1.6rem;
 	}
 	.clamp .aniHeight span {
 		position: absolute;
 		bottom: .5rem;
-		left: 0;
 		width: 100%;
 		text-align: center;
 		color: rgb(254,222,112);
@@ -160,8 +145,8 @@
 		width: 1.8rem;
 		height: 2.2rem;
 		position: relative;
-		top:-.7rem;
-    	left: -.16rem;
+		top:-.5rem;
+    	left: -.26rem;
     	animation-fill-mode : forwards;
     	opacity: 1;
 		-webkit-backface-visibility: hidden;
@@ -267,10 +252,8 @@
 			<div class="item fontSize_30">ID:{{user.id}}</div>
 			<div class="item flex-box flex-align_center"><span class="flex-item fontSize_30">￥:{{user.money}}</span><i class="add" @click="goRecharge"></i></div>
 		</div>
-		<div class="clampBox flex-box flex-justify_center" v-el:clampbox>
-			<div class="clamp" v-el:clamp>
-				<img src="../images/clamp_02.png">
-			</div>
+		<div class="clamp" v-el:clamp>
+			<img src="../images/jz_03.png" v-el:img>
 		</div>
 		<!--<marquee class="loop" loop="infinite" direction="left" behavior="scroll" v-el:loop>
             <ul class="flex-box" v-el:ul>
@@ -446,16 +429,13 @@
 				this.isChoose=value;
 			},
 			animateDown(){
-				console.log(this.$els)
 				let start=this.$els.clamp.offsetTop;
-				let stop=this.$els.loop.offsetTop - this.$els.clampbox.offsetTop - this.$els.clamp.offsetHeight/8;
+				let stop=this.$els.loop.offsetTop - start - this.$els.clamp.offsetHeight/2;
 				let time=0;
 				let eTime=2;
 				let that=this;
-				var cleft=that.$els.clamp.offsetLeft + that.$els.clampbox.offsetLeft;
-				var cright=that.$els.clamp.offsetLeft + that.$els.clamp.offsetWidth + that.$els.clampbox.offsetLeft;
 				var arrObj=this.$els.box.getElementsByClassName('box');
-				var parObj=this.$els.box;
+				var parObj=this.$els.loop;
 				var item;
 				function step(){
 					let [t,b,c,d]=[time,start,stop,eTime];
@@ -470,11 +450,11 @@
 						}
 						that.animateUp();
 						return;
-					}				
-					if(that.$els.clamp.offsetTop + that.$els.clamp.offsetHeight + that.$els.clampbox.offsetTop>that.$els.loop.offsetTop) {
+					}
+					if(that.$els.img.offsetTop + that.$els.img.offsetHeight>that.$els.loop.offsetTop) {
 						for(var i=0;i<arrObj.length;i++){
-							if(cleft>arrObj[i].offsetLeft + parObj.offsetLeft + arrObj[i].parentElement.parentElement.offsetLeft&&
-							cright<arrObj[i].offsetLeft  + parObj.offsetLeft + arrObj[i].offsetWidth + arrObj[i].parentElement.parentElement.offsetLeft) {
+							if(that.$els.img.offsetLeft>arrObj[i].offsetLeft + that.$els.box.offsetLeft&&
+							that.$els.img.offsetLeft + that.$els.img.offsetWidth<arrObj[i].offsetLeft + that.$els.box.offsetLeft + arrObj[i].offsetWidth) {
 								that.isReward=true;
 								item=arrObj[i];
 								arrObj[i].style.display='none';
@@ -490,7 +470,7 @@
 			},
 			animateUp:function(){
 				let start=this.$els.clamp.offsetTop;
-				let stop=this.$els.clampbox.offsetTop + this.$els.clamp.offsetHeight/8 - this.$els.loop.offsetTop;
+				let stop=-start+50;
 				let time=0;
 				let eTime=2;
 				let that=this;
@@ -533,7 +513,10 @@
 				this.i=375;
 				var k=1;
 				function step(){
+					/*console.count()*/
 					that.i-=1;
+					/*console.log(that.$els.box.offsetLeft)
+					console.log(that.$els.ul.offsetWidth)*/
 					if(that.$els.ul.offsetWidth+that.$els.box.offsetLeft<0) {
 						that.$els.box.style.left=0;
 						that.i=0;
